@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Parts Store</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="top-header">
+        <div class="logo">
+          <img src="logo.png" alt="Auto Parts Logo" />
+        </div>
+
+        <div class="search-bar">
+          <input type="text" placeholder="Search for parts..." />
+          <button type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+
+        <div class="cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count">0</span>
+        </div>
+      </div>
+
+      <nav class="categories">
+        <ul>
+          <li><a href="#" id="auto-parts-link">Auto Parts</a></li>
+          <li><a href="#oils-fluids">Oils, Fluids & Additives</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <nav class="breadcrumb">
+      <ul class="breadcrumbs">
+        <li class="breadcrumb-item">
+          <a href="#" id="breadcrumb-auto-parts">Auto Parts</a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="brands-hero">
+      <ul class="brands-container">
+        <li class="brand-item" data-brand="audi">
+          <a href="#" class="brand-link">
+            <img src="images/e-marka.png" class="brand-logo" alt="Audi" />
+            <span>Audi</span>
+          </a>
+        </li>
+        <li class="brand-item" data-brand="alfa-romeo">
+          <a href="#" class="brand-link">
+            <img src="images/e-marka.png" class="brand-logo" alt="Alfa Romeo" />
+            <span>Alfa Romeo</span>
+          </a>
+        </li>
+        <li class="brand-item" data-brand="bmw">
+          <a href="#" class="brand-link">
+            <img src="images/e-marka.png" class="brand-logo" alt="BMW" />
+            <span>BMW</span>
+          </a>
+        </li>
+        <li class="brand-item" data-brand="mercedes">
+          <a href="#" class="brand-link">
+            <img
+              src="images/e-marka.png"
+              class="brand-logo"
+              alt="Mercedes-Benz"
+            />
+            <span>Mercedes-Benz</span>
+          </a>
+        </li>
+        <li class="brand-item" data-brand="vw">
+          <a href="#" class="brand-link">
+            <img src="images/e-marka.png" class="brand-logo" alt="VW" />
+            <span>VW</span>
+          </a>
+        </li>
+        <li class="brand-item" data-brand="opel">
+          <a href="#" class="brand-link">
+            <img src="images/e-marka.png" class="brand-logo" alt="Opel" />
+            <span>Opel</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="models-container hidden" id="audi-models">
+        <ul class="models-list">
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img
+                src="images/audi-100.jpg"
+                class="model-image"
+                alt="Audi 100"
+              />
+              <span>Audi 100</span>
+            </a>
+          </li>
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img src="images/audi-80.jpg" class="model-image" alt="Audi 80" />
+              <span>Audi 80</span>
+            </a>
+          </li>
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img src="images/audi-a3.jpg" class="model-image" alt="Audi A3" />
+              <span>Audi A3</span>
+            </a>
+          </li>
+          <!-- Add more Audi models -->
+        </ul>
+      </div>
+
+      <div class="models-container hidden" id="alfa-romeo-models">
+        <ul class="models-list">
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img
+                src="images/alfa-147.jpg"
+                class="model-image"
+                alt="Alfa 147"
+              />
+              <span>Alfa 147</span>
+            </a>
+          </li>
+          <!-- Add more Alfa Romeo models -->
+        </ul>
+      </div>
+
+      <div class="models-container hidden" id="bmw-models">
+        <ul class="models-list">
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img src="images/bmw-3.jpg" class="model-image" alt="BMW 3" />
+              <span>BMW 3</span>
+            </a>
+          </li>
+          <!-- Add more BMW models -->
+        </ul>
+      </div>
+
+      <div class="models-container hidden" id="mercedes-models">
+        <ul class="models-list">
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img
+                src="images/mercedes-c.jpg"
+                class="model-image"
+                alt="C Class"
+              />
+              <span>C Class</span>
+            </a>
+          </li>
+          <!-- Add more Mercedes models -->
+        </ul>
+      </div>
+
+      <div class="models-container hidden" id="vw-models">
+        <ul class="models-list">
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img src="images/vw-golf.jpg" class="model-image" alt="Golf" />
+              <span>Golf</span>
+            </a>
+          </li>
+          <!-- Add more VW models -->
+        </ul>
+      </div>
+
+      <div class="models-container hidden" id="opel-models">
+        <ul class="models-list">
+          <li class="model-item">
+            <a href="#" class="model-link">
+              <img
+                src="images/opel-astra.jpg"
+                class="model-image"
+                alt="Astra"
+              />
+              <span>Astra</span>
+            </a>
+          </li>
+          <!-- Add more Opel models -->
+        </ul>
+      </div>
+    </section>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,276 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f0f0f0;
+}
+
+header {
+  background-color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 1rem 0;
+}
+
+.top-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.logo img {
+  height: 50px;
+  /* Replace with your actual logo dimensions */
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 2rem;
+  display: flex;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+}
+
+.search-bar button {
+  padding: 0.5rem 1rem;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.cart {
+  position: relative;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #d32f2f;
+  color: white;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+.categories {
+  max-width: 1200px;
+  margin: 1rem auto 0;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.categories ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.categories a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.categories a:hover {
+  color: #ff4444;
+}
+
+.categories a:hover::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ff4444;
+}
+
+.brands-hero {
+  padding: 2rem 0;
+  background-color: #f0f0f0;
+  display: none; /* Hide by default */
+}
+
+.brands-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-item {
+  flex: 0 0 calc(33.333% - 1rem); /* 3 items per row with gap */
+  background: #fff;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  text-decoration: none;
+  color: #333;
+  gap: 1rem;
+  position: relative;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brand-item:hover {
+  transform: translateY(-2px);
+  background-color: #e9e9e9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Add arrow indicator */
+.brand-link::after {
+  content: "›";
+  position: absolute;
+  right: 1rem;
+  font-size: 1.2rem;
+  color: #999;
+}
+
+/* Adjust hover state */
+.brand-item:hover .brand-link::after {
+  color: #d32f2f;
+  transform: translateX(3px);
+  transition: transform 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .brand-item {
+    flex: 0 0 calc(50% - 1rem); /* 2 items per row */
+  }
+}
+
+@media (max-width: 576px) {
+  .brand-item {
+    flex: 0 0 100%; /* 1 item per row */
+  }
+}
+
+/* Update breadcrumb styles */
+.breadcrumb {
+  max-width: 1200px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+.breadcrumbs {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breadcrumb-item {
+  color: #666;
+}
+
+.breadcrumb-item a {
+  text-decoration: none;
+  color: #666;
+}
+
+.breadcrumb-item a:hover {
+  color: #d32f2f;
+}
+
+.breadcrumb-separator {
+  color: #999;
+}
+
+/* Add styles for model listings */
+.models-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.models-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.model-item {
+  flex: 0 0 calc(33.333% - 1rem);
+  background: #fff;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.model-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  text-decoration: none;
+  color: #333;
+  gap: 1rem;
+  position: relative;
+}
+
+.model-image {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.model-item:hover {
+  transform: translateY(-2px);
+  background-color: #e9e9e9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.model-link::after {
+  content: "›";
+  position: absolute;
+  right: 1rem;
+  font-size: 1.2rem;
+  color: #999;
+}
+
+.model-item:hover .model-link::after {
+  color: #d32f2f;
+  transform: translateX(3px);
+  transition: transform 0.3s ease;
+}
+
+/* Add this to your existing styles */
+.hidden {
+  display: none;
+}
