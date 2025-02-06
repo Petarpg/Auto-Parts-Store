@@ -67,6 +67,84 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   };
 
+  // Add this engine data structure at the top with other data
+  const engineData = {
+    petrol: [
+      {
+        engine: "1.8",
+        power: "75 коня - 55 kW",
+        years: "08.1982 - 12.1987",
+        fuel: "бензин",
+        code: "DR, RS",
+      },
+      {
+        engine: "1.8",
+        power: "88 коня - 65 kW",
+        years: "02.1986 - 07.1988",
+        fuel: "бензин",
+        code: "SH",
+      },
+      {
+        engine: "1.8 quattro",
+        power: "88 коня - 65 kW",
+        years: "08.1986 - 07.1990",
+        fuel: "бензин",
+        code: "SH",
+      },
+      {
+        engine: "1.8",
+        power: "90 коня - 66 kW",
+        years: "08.1983 - 07.1989",
+        fuel: "бензин",
+        code: "DS, NP, SH",
+      },
+      {
+        engine: "1.8 Cat",
+        power: "90 коня - 66 kW",
+        years: "03.1985 - 11.1990",
+        fuel: "бензин",
+        code: "4B, PH",
+      },
+    ],
+    diesel: [
+      {
+        engine: "2.0 D",
+        power: "70 коня - 51 kW",
+        years: "08.1982 - 07.1988",
+        fuel: "дизел",
+        code: "CN",
+      },
+      {
+        engine: "2.0 D Turbo",
+        power: "87 коня - 64 kW",
+        years: "08.1982 - 07.1988",
+        fuel: "дизел",
+        code: "DE",
+      },
+      {
+        engine: "2.0 D Turbo",
+        power: "100 коня - 74 kW",
+        years: "03.1988 - 11.1990",
+        fuel: "дизел",
+        code: "NC",
+      },
+      {
+        engine: "2.4 D",
+        power: "82 коня - 60 kW",
+        years: "08.1989 - 07.1991",
+        fuel: "дизел",
+        code: "3D",
+      },
+      {
+        engine: "2.5 TDI",
+        power: "120 коня - 88 kW",
+        years: "01.1990 - 11.1990",
+        fuel: "дизел",
+        code: "1T",
+      },
+    ],
+  };
+
   // Initially hide breadcrumb
   breadcrumbsList.style.display = "none";
 
@@ -295,6 +373,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Update breadcrumbs to include version
     updateBreadcrumbs("version", version, brandKey, modelKey);
+
+    // Hide engine specs
+    document.querySelector(".engine-details").classList.add("hidden");
+    document.querySelectorAll(".engine-type-btn").forEach((btn) => {
+      btn.classList.remove("active");
+    });
   }
 
   function showBrands() {
@@ -394,6 +478,53 @@ document.addEventListener("DOMContentLoaded", function () {
           <a href="#">${value}</a>
         </li>
       `;
+    }
+  }
+
+  document
+    .querySelector(".engine-types")
+    .addEventListener("click", function (e) {
+      const button = e.target.closest(".engine-type-btn");
+      if (!button) return;
+
+      // Remove active class from all buttons
+      document.querySelectorAll(".engine-type-btn").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+
+      // Add active class to clicked button
+      button.classList.add("active");
+
+      if (button.classList.contains("petrol")) {
+        showEngineSpecs("petrol");
+      } else if (button.classList.contains("diesel")) {
+        showEngineSpecs("diesel");
+      }
+    });
+
+  function showEngineSpecs(fuelType) {
+    const tableBody = document.querySelector(".engine-specs tbody");
+    const engineDetails = document.querySelector(".engine-details");
+
+    if (fuelType === "petrol" || fuelType === "diesel") {
+      const engines = engineData[fuelType];
+      tableBody.innerHTML = engines
+        .map(
+          (engine) => `
+          <tr>
+            <td>${engine.engine}</td>
+            <td>${engine.power}</td>
+            <td>${engine.years}</td>
+            <td>${engine.fuel}</td>
+            <td>${engine.code}</td>
+          </tr>
+        `
+        )
+        .join("");
+
+      engineDetails.classList.remove("hidden");
+    } else {
+      engineDetails.classList.add("hidden");
     }
   }
 });
