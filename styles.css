@@ -108,7 +108,6 @@ header {
 }
 
 .brands-hero {
-  padding: 2rem 0;
   background-color: #f0f0f0;
   display: none; /* Hide by default */
 }
@@ -422,10 +421,186 @@ header {
   font-weight: 500;
 }
 
-.engine-specs tr:hover {
-  background: #f8f8f8;
+/* Update table row styles */
+.engine-specs tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  position: relative;
 }
 
-.engine-specs td:last-child {
-  text-align: right;
+/* Remove pointer cursor from individual cells */
+.engine-specs td {
+  cursor: default;
+  user-select: none; /* Prevents text selection */
+}
+
+/* Add hover effect to the entire row */
+.engine-specs tbody tr:hover {
+  background-color: #f8f8f8;
+}
+
+/* Add a clickable overlay to make the entire row act as one unit */
+.engine-specs tbody tr::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.parts-search {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.parts-search input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.parts-search button {
+  padding: 0.8rem 1.5rem;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.categories-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+
+.category-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.category-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-item img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.category-item span {
+  display: block;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Add cursor pointer to table rows */
+.engine-specs tbody tr {
+  cursor: pointer;
+}
+
+.model-version-item.clickable:hover {
+  transform: translateY(-2px);
+  background-color: #e9e9e9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.model-version-item:not(.clickable) {
+  pointer-events: none;
+}
+
+.parts-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.parts-dropdown {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.parts-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.parts-dropdown-header h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: #666;
+}
+
+.parts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.part-item {
+  background: #f8f8f8;
+  border-radius: 4px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.part-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.part-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.part-item span {
+  display: block;
+  color: #333;
+  font-size: 0.9rem;
 }

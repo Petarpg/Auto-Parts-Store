@@ -145,6 +145,67 @@ document.addEventListener("DOMContentLoaded", function () {
     ],
   };
 
+  // Add this at the top level with other data structures
+  let currentVersionInfo = {
+    brandKey: null,
+    modelKey: null,
+    version: null,
+    modelName: null,
+  };
+
+  // Update the categoryParts data structure with all categories
+  const categoryParts = {
+    "Спирачна система": [
+      { name: "Спирачни дискове", image: "images/placeholder.jpeg" },
+      { name: "Спирачни накладки", image: "images/placeholder.jpeg" },
+      { name: "Спирачни апарати", image: "images/placeholder.jpeg" },
+      { name: "Спирачни маркучи", image: "images/placeholder.jpeg" },
+    ],
+    "Окачване на колелата": [
+      { name: "Амортисьори", image: "images/placeholder.jpeg" },
+      { name: "Пружини", image: "images/placeholder.jpeg" },
+      { name: "Носачи", image: "images/placeholder.jpeg" },
+      { name: "Тампони", image: "images/placeholder.jpeg" },
+    ],
+    "Кормилна система": [
+      { name: "Кормилни накрайници", image: "images/placeholder.jpeg" },
+      {
+        name: "Рейка кормилна кутия",
+        image: "images/placeholder.jpeg",
+      },
+      { name: "Кормилна щанга", image: "images/placeholder.jpeg" },
+      {
+        name: "Маншон за кормилен накрайник",
+        image: "images/placeholder.jpeg",
+      },
+      { name: "Хидравлична помпа", image: "images/placeholder.jpeg" },
+      { name: "Тампони за кормилна рейка", image: "images/placeholder.jpeg" },
+      {
+        name: "Демпфер кормилно управление",
+        image: "images/placeholder.jpeg",
+      },
+      { name: "Кормилен хебел", image: "images/placeholder.jpeg" },
+    ],
+    "Задвижване на колелата": [
+      { name: "Полуоски", image: "images/placeholder.jpeg" },
+      { name: "Шарнири", image: "images/placeholder.jpeg" },
+      { name: "Маншони", image: "images/placeholder.jpeg" },
+    ],
+    Трансмисия: [
+      {
+        name: "Съединител комплект",
+        image: "images/placeholder.jpeg",
+      },
+      { name: "Маховик", image: "images/placeholder.jpeg" },
+      { name: "Лагер съединител", image: "images/placeholder.jpeg" },
+    ],
+    "Ремъчно задвижване": [
+      { name: "Ангренажен ремък", image: "images/placeholder.jpeg" },
+      { name: "Ролки", image: "images/placeholder.jpeg" },
+      { name: "Пистов ремък", image: "images/placeholder.jpeg" },
+    ],
+  };
+
   // Initially hide breadcrumb
   breadcrumbsList.style.display = "none";
 
@@ -201,29 +262,31 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // Handle model version clicks
-  document.querySelectorAll(".model-details").forEach((container) => {
-    container.addEventListener("click", function (e) {
+  document
+    .querySelector(".model-versions-list")
+    .addEventListener("click", function (e) {
       e.preventDefault();
       const versionItem = e.target.closest(".model-version-item");
-      if (!versionItem) return;
+      if (!versionItem || !versionItem.classList.contains("clickable")) return;
 
-      const versionName = versionItem.dataset.version;
-      const modelName = this.id.replace("-details", "").split("-").pop();
-      const brandName = this.id.replace("-details", "").split("-")[0];
+      const version = versionItem.dataset.version;
+      const brandKey = versionItem.dataset.brand;
+      const modelKey = versionItem.dataset.model;
 
-      // Hide the model versions list
-      this.querySelector(".model-versions-list").classList.add("hidden");
+      // Hide model versions container
+      document
+        .querySelector(".model-versions-container")
+        .classList.add("hidden");
 
-      // Show the version details (you'll need to add this container)
-      const versionDetails = document.getElementById(
-        `${brandName}-${modelName}-${versionName}-details`
-      );
-      if (versionDetails) {
-        versionDetails.classList.remove("hidden");
-        updateBreadcrumbs("version", versionName, brandName, modelName);
-      }
+      // Show version details container and its children
+      document
+        .querySelector(".version-details-container")
+        .classList.remove("hidden");
+      document.querySelector(".selected-version").classList.remove("hidden");
+      document.querySelector(".engine-types").classList.remove("hidden");
+
+      showVersionDetails(brandKey, modelKey, version);
     });
-  });
 
   // Handle breadcrumb clicks
   breadcrumbsList.addEventListener("click", function (e) {
@@ -233,6 +296,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const type = clickedItem.dataset.type;
     const value = clickedItem.dataset.value;
+    const brandKey = clickedItem.dataset.brand;
+    const modelKey = clickedItem.dataset.model;
 
     // Hide all containers first
     document.querySelector(".model-versions-container").classList.add("hidden");
@@ -240,17 +305,16 @@ document.addEventListener("DOMContentLoaded", function () {
       .querySelector(".version-details-container")
       .classList.add("hidden");
     document.querySelector(".engine-types").classList.add("hidden");
+    document.querySelector(".engine-details").classList.add("hidden");
+    document.querySelector(".parts-categories").classList.add("hidden");
 
     if (type === "auto-parts") {
       showBrands();
     } else if (type === "brand") {
-      // Get the brand key and generate its models
-      const brandKey = value;
-      generateModels(brandKey);
-      updateBreadcrumbs("brand", carData[brandKey].name, brandKey);
+      generateModels(value);
+      updateBreadcrumbs("brand", carData[value].name, value);
     } else if (type === "model") {
-      const brandKey = clickedItem.dataset.brand;
-      const modelKey = clickedItem.dataset.model;
+      // Regenerate model versions when navigating back to model
       generateModelVersions(brandKey, modelKey);
       updateBreadcrumbs(
         "model",
@@ -258,6 +322,28 @@ document.addEventListener("DOMContentLoaded", function () {
         brandKey,
         modelKey
       );
+    } else if (type === "version") {
+      // Show version details when navigating back to version
+      document
+        .querySelector(".version-details-container")
+        .classList.remove("hidden");
+      document.querySelector(".selected-version").classList.remove("hidden");
+      document.querySelector(".engine-types").classList.remove("hidden");
+
+      // Use stored version info if available, otherwise use breadcrumb data
+      const versionToShow = currentVersionInfo.version || value;
+      const brandKeyToUse = currentVersionInfo.brandKey || brandKey;
+      const modelKeyToUse = currentVersionInfo.modelKey || modelKey;
+
+      showVersionDetails(brandKeyToUse, modelKeyToUse, versionToShow);
+    } else if (type === "auto-parts" || type === "brand") {
+      // Clear stored version info when navigating back too far
+      currentVersionInfo = {
+        brandKey: null,
+        modelKey: null,
+        version: null,
+        modelName: null,
+      };
     }
   });
 
@@ -305,21 +391,46 @@ document.addEventListener("DOMContentLoaded", function () {
     const versionsList = document.querySelector(".model-versions-list");
     versionsList.innerHTML = ""; // Clear previous versions
 
+    // Check if the model and its versions exist
+    if (!carData[brandKey]?.models[modelKey]?.versions) {
+      console.warn(`No versions found for ${brandKey} ${modelKey}`);
+      return;
+    }
+
     carData[brandKey].models[modelKey].versions.forEach((version) => {
+      // Only create clickable version if it has data
       const versionElement = document.createElement("li");
       versionElement.classList.add("model-version-item");
-      versionElement.dataset.version = version;
-      versionElement.dataset.brand = brandKey;
-      versionElement.dataset.model = modelKey;
+
+      // Add version info without making it clickable if no data
       versionElement.innerHTML = `
-        <a href="#" class="model-version-link">
+        <div class="model-version-link">
           <img src="images/audi-100-c4.png" class="model-version-image" alt="" />
           <div class="model-version-info">
             <h3>${carData[brandKey].models[modelKey].name} (${version})</h3>
             <span class="model-years">12.1990 - 07.1994</span>
           </div>
-        </a>
+        </div>
       `;
+
+      // Only add click-related attributes if we have engine data for this version
+      if (engineData.petrol.length > 0 || engineData.diesel.length > 0) {
+        versionElement.dataset.version = version;
+        versionElement.dataset.brand = brandKey;
+        versionElement.dataset.model = modelKey;
+
+        // Make it look clickable
+        versionElement.querySelector(".model-version-link").style.cursor =
+          "pointer";
+        // Add hover effect class
+        versionElement.classList.add("clickable");
+      } else {
+        // Make it look non-clickable
+        versionElement.style.opacity = "0.7";
+        versionElement.querySelector(".model-version-link").style.cursor =
+          "default";
+      }
+
       versionsList.appendChild(versionElement);
     });
 
@@ -330,24 +441,14 @@ document.addEventListener("DOMContentLoaded", function () {
       .classList.remove("hidden");
   }
 
-  // Add event listener for version clicks
-  document
-    .querySelector(".model-versions-list")
-    .addEventListener("click", function (e) {
-      e.preventDefault();
-      const versionItem = e.target.closest(".model-version-item");
-      if (!versionItem) return;
-
-      const version = versionItem.dataset.version;
-      const brandKey = versionItem.dataset.brand;
-      const modelKey = versionItem.dataset.model;
-
-      showVersionDetails(brandKey, modelKey, version);
-    });
-
   function showVersionDetails(brandKey, modelKey, version) {
-    // Hide versions list
-    document.querySelector(".model-versions-container").classList.add("hidden");
+    // Store current version info
+    currentVersionInfo = {
+      brandKey,
+      modelKey,
+      version,
+      modelName: carData[brandKey]?.models[modelKey]?.name || "",
+    };
 
     // Show selected version with engine type buttons
     const selectedVersion = document.querySelector(".selected-version");
@@ -356,26 +457,31 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="model-version-link">
           <img src="images/audi-100-c4.png" class="model-version-image" alt="" />
           <div class="model-version-info">
-            <h3>${carData[brandKey].models[modelKey].name} (${version})</h3>
+            <h3>${currentVersionInfo.modelName} (${currentVersionInfo.version})</h3>
             <span class="model-years">12.1990 - 07.1994</span>
           </div>
         </div>
       </div>
     `;
 
-    // Show version details container
+    // Show version details container and its children
     document
       .querySelector(".version-details-container")
       .classList.remove("hidden");
-
-    // Show engine types only after version is selected
+    document.querySelector(".selected-version").classList.remove("hidden");
     document.querySelector(".engine-types").classList.remove("hidden");
 
-    // Update breadcrumbs to include version
-    updateBreadcrumbs("version", version, brandKey, modelKey);
+    // Update breadcrumbs to only show up to model level
+    updateBreadcrumbs(
+      "model",
+      currentVersionInfo.modelName,
+      currentVersionInfo.brandKey,
+      currentVersionInfo.modelKey
+    );
 
-    // Hide engine specs
+    // Hide engine specs and parts categories
     document.querySelector(".engine-details").classList.add("hidden");
+    document.querySelector(".parts-categories").classList.add("hidden");
     document.querySelectorAll(".engine-type-btn").forEach((btn) => {
       btn.classList.remove("active");
     });
@@ -395,6 +501,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .querySelector(".version-details-container")
       .classList.add("hidden");
     document.querySelector(".engine-types").classList.add("hidden");
+    document.querySelector(".parts-categories").classList.add("hidden");
 
     // Show brands
     brandsHero.style.display = "block";
@@ -526,5 +633,119 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       engineDetails.classList.add("hidden");
     }
+  }
+
+  // Update the table click handler to add version to breadcrumbs only when showing parts
+  document
+    .querySelector(".engine-specs tbody")
+    .addEventListener("click", function (e) {
+      // Only proceed if we clicked a row or its descendants
+      const row = e.target.closest("tr");
+      if (!row) return;
+
+      // Prevent any text selection
+      e.preventDefault();
+
+      // Get current version info from breadcrumbs
+      const modelBreadcrumb = document.querySelector('[data-type="model"]');
+      const brandKey = modelBreadcrumb.dataset.brand;
+      const modelKey = modelBreadcrumb.dataset.model;
+      const version = document
+        .querySelector(".model-version-info h3")
+        .textContent.match(/\((.*?)\)/)[1];
+
+      // First hide the version-details-container (which contains everything)
+      document
+        .querySelector(".version-details-container")
+        .classList.add("hidden");
+
+      // Then hide individual elements
+      document.querySelector(".selected-version").classList.add("hidden");
+      document.querySelector(".engine-types").classList.add("hidden");
+      document.querySelector(".engine-details").classList.add("hidden");
+
+      // Finally show parts categories and update breadcrumbs with version
+      document.querySelector(".parts-categories").classList.remove("hidden");
+
+      // Add version to breadcrumbs only when showing parts
+      updateBreadcrumbs("version", version, brandKey, modelKey);
+    });
+
+  // Add click handler for category items
+  document.querySelectorAll(".category-item").forEach((item) => {
+    item.addEventListener("click", function () {
+      const categoryName = this.querySelector("span").textContent;
+      const parts = categoryParts[categoryName];
+
+      if (parts) {
+        showPartsDropdown(parts, this);
+      }
+    });
+  });
+
+  function showPartsDropdown(parts, categoryElement) {
+    // Create modal-like overlay
+    const overlay = document.createElement("div");
+    overlay.className = "parts-overlay";
+
+    // Create dropdown container with header
+    const dropdown = document.createElement("div");
+    dropdown.className = "parts-dropdown";
+
+    // Add header with title and close button
+    const header = document.createElement("div");
+    header.className = "parts-dropdown-header";
+    header.innerHTML = `
+      <h2>${categoryElement.querySelector("span").textContent} - ${
+      currentVersionInfo.modelName
+    } (${currentVersionInfo.version})</h2>
+      <button class="close-btn">&times;</button>
+    `;
+
+    // Add parts grid
+    const partsGrid = document.createElement("div");
+    partsGrid.className = "parts-grid";
+    parts.forEach((part) => {
+      const partItem = document.createElement("div");
+      partItem.className = "part-item";
+      partItem.innerHTML = `
+        <img src="${part.image}" alt="${part.name}" />
+        <span>${part.name}</span>
+      `;
+      partsGrid.appendChild(partItem);
+    });
+
+    // Assemble the dropdown
+    dropdown.appendChild(header);
+    dropdown.appendChild(partsGrid);
+    overlay.appendChild(dropdown);
+    document.body.appendChild(overlay);
+
+    // Function to close the overlay
+    const closeOverlay = () => {
+      overlay.remove();
+      // Remove the event listener when closing
+      document.removeEventListener("keydown", handleEscKey);
+    };
+
+    // Handle ESC key press
+    const handleEscKey = (e) => {
+      if (e.key === "Escape") {
+        closeOverlay();
+      }
+    };
+
+    // Add ESC key listener
+    document.addEventListener("keydown", handleEscKey);
+
+    // Handle close button click
+    header.querySelector(".close-btn").addEventListener("click", closeOverlay);
+
+    // Close when clicking outside
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        closeOverlay();
+      }
+    });
   }
 });
